@@ -42,7 +42,7 @@ import javax.tools.JavaFileObject;
  * Created by baoyz on 15/6/24.
  */
 
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes("com.bhm.sdk.greendao.Parcelable")
 public class PGProcessor extends AbstractProcessor{
 
