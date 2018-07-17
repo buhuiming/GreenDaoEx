@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'org.greenrobot.greendao'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.google.android:android:+'
+    compile 'org.greenrobot:greendao:3.2.2'
+}
+
+publish {
+    userOrg = 'bikie'
+    groupId = 'com.bhm.sdk.greendao' //包名
+    artifactId = 'core'    //新建仓库的名字
+    publishVersion  = '3.2.2'    // 版本号
+    desc = 'The encapsulation of greendao, updating the database, and inheriting the original data'  //描述 可随意写
+    website = "https://github.com/buhuiming"  //代码地址github，也可不写
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
