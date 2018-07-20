@@ -1,22 +1,38 @@
 package com.bhm.sdk.greendao.demo.entity;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.Unique;
+import com.bhm.sdk.greendao.Parcelable;
 
 /**
  * Created by bhm on 2018/7/18.
  */
-@Entity
-@GreenDaoEx
+@Parcelable
 public class TestEntity {
 
-    //不能用int
-    @Id(autoincrement = true)
     private Long id;
-    @Unique
     private String username;//帐号
-    @Property(nameInDb = "password")
     private String password;//密码
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

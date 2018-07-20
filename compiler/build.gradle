@@ -7,6 +7,8 @@ version = "3.2.2"
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':core')
+    compile 'com.squareup:javapoet:1.11.1'
+    compile 'com.squareup:javawriter:2.5.1'
 }
 
 def siteUrl = 'https://github.com/buhuiming/GreenDaoEx'

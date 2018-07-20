@@ -23,7 +23,17 @@
  */
 package com.bhm.sdk.greendao;
 
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javawriter.JavaWriter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.EnumSet;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -34,6 +44,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
@@ -59,6 +70,8 @@ public class PGProcessor extends AbstractProcessor{
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         try {
+            javaPoet();
+            testJavaWriter();
             Set<? extends Element> set = roundEnv
                     .getElementsAnnotatedWith(Parcelable.class);
             for (Element element : set) {
@@ -95,5 +108,57 @@ public class PGProcessor extends AbstractProcessor{
         // } catch (IOException e) {
         // e.printStackTrace();
         // }
+    }
+
+    private void javaPoet() throws Exception{
+        // main method
+        MethodSpec main = MethodSpec.methodBuilder("main")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(void.class)
+                .addParameter(String[].class, "args")
+                .addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
+                .build();
+        // HelloWorld class
+        TypeSpec helloWorld = TypeSpec.classBuilder("HelloWorld")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethod(main)
+                .build();
+
+        // build com.example.HelloWorld.java
+        JavaFile javaFile = JavaFile.builder("com.bhm.sdk.greendao.demo", helloWorld)
+                .addFileComment(" This codes are generated automatically. Do not modify!")
+                .build();
+        // write to file
+        javaFile.writeTo(filer);
+    }
+
+    private void testJavaWriter() throws IOException {
+        String packageName = "com.bhm.sdk.greendao.demo.entity";
+        String className = "GenerateEntity";
+        File outFile = new File("demo/src/main/java/" + packageName.replaceAll("\\.", "/") + "/" + className + ".java");
+        if(!outFile.getParentFile().exists()) {
+            outFile.getParentFile().mkdirs();
+        }
+        if (!outFile.exists()) {
+            outFile.createNewFile();
+        }
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outFile));
+        JavaWriter jw = new JavaWriter(writer);
+        jw.emitPackage(packageName)
+                .beginType(packageName + "." + className, "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL))
+                .emitField("String", "firstName", EnumSet.of(Modifier.PRIVATE))
+                .emitField("String", "lastName", EnumSet.of(Modifier.PRIVATE))
+                .emitJavadoc("Return the person's full name")
+                .beginMethod("String", "getName", EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("return firstName + \" - \" + lastName")
+                .endMethod()
+                .beginMethod("String", "getFirstName", EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("return firstName")
+                .endMethod()
+                .beginMethod("String", "getLastName", EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("return lastName")
+                .endMethod()
+                .endType()
+                .close();
     }
 }
