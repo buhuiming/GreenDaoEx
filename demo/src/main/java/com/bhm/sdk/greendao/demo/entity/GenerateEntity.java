@@ -1,5 +1,8 @@
 package com.bhm.sdk.greendao.demo.entity;
 
+/**
+ * This codes are generated automatically. Do not modify!
+ */
 public final class GenerateEntity {
   private String firstName;
   private String lastName;

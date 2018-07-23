@@ -145,6 +145,7 @@ public class PGProcessor extends AbstractProcessor{
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outFile));
         JavaWriter jw = new JavaWriter(writer);
         jw.emitPackage(packageName)
+                .emitJavadoc("This codes are generated automatically. Do not modify!")
                 .beginType(packageName + "." + className, "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL))
                 .emitField("String", "firstName", EnumSet.of(Modifier.PRIVATE))
                 .emitField("String", "lastName", EnumSet.of(Modifier.PRIVATE))
