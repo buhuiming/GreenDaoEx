@@ -51,6 +51,7 @@ import javax.tools.JavaFileObject;
 /**
  * ParcelableGenerator
  * Created by baoyz on 15/6/24.
+ * alter by bhm on 18/8/9
  */
 
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -72,6 +73,8 @@ public class PGProcessor extends AbstractProcessor{
         try {
             javaPoet();
             testJavaWriter();
+
+            //编译期间，在build/generated/apt/debug/包下生成java代码
             Set<? extends Element> set = roundEnv
                     .getElementsAnnotatedWith(Parcelable.class);
             for (Element element : set) {
@@ -110,6 +113,9 @@ public class PGProcessor extends AbstractProcessor{
         // }
     }
 
+    /** 编译期间，在build/generated/apt/debug/包下生成java代码
+     * @throws Exception
+     */
     private void javaPoet() throws Exception{
         // main method
         MethodSpec main = MethodSpec.methodBuilder("main")
@@ -132,6 +138,9 @@ public class PGProcessor extends AbstractProcessor{
         javaFile.writeTo(filer);
     }
 
+    /**编译期间，在src/main/java指定包下生成java代码
+     * @throws IOException
+     */
     private void testJavaWriter() throws IOException {
         String packageName = "com.bhm.sdk.greendao.demo.entity";
         String className = "GenerateEntity";
